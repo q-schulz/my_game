@@ -22,10 +22,11 @@ while running:
     #Fill the screen with a color to wipe away anything from last frame
     
     screen.fill("black")
-    screen.blit(test_surface, ((screen.get_width() / 2) - (test_surface.get_width() / 2) ,
-                                (screen.get_height() / 2) - (test_surface.get_height() / 2)))
+    
 
     #RENDER YOUR GAME HERE
+    screen.blit(test_surface, ((screen.get_width() / 2) - (test_surface.get_width() / 2) ,
+                                (screen.get_height() / 2) - (test_surface.get_height() / 2)))
     pygame.draw.circle(screen, "red", player_pos, 40)
 
     keys = pygame.key.get_pressed()
