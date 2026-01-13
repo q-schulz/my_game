@@ -2,7 +2,7 @@ import pygame
 
 #pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((800, 400))
 clock = pygame.time.Clock()
 running = True
 dt = 0
@@ -10,6 +10,13 @@ dt = 0
 test_surface = pygame.Surface((100,200))
 test_surface.fill('Red')
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+
+#Background Surfaces
+sky_surface = pygame.image.load('graphics/Sky.png')
+ground_surface = pygame.image.load('graphics/Ground.png')
+
+#Player Surface
+player_surface = pygame.image.load('graphics/player/player_stand.png')
 
 while running:
     pygame.display.update()
@@ -19,15 +26,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    #Fill the screen with a color to wipe away anything from last frame
-    
-    screen.fill("black")
-    
 
     #RENDER YOUR GAME HERE
-    screen.blit(test_surface, ((screen.get_width() / 2) - (test_surface.get_width() / 2) ,
-                                (screen.get_height() / 2) - (test_surface.get_height() / 2)))
-    pygame.draw.circle(screen, "red", player_pos, 40)
+    screen.blit(sky_surface,(0,0))
+    screen.blit(ground_surface,(0,300))
+    # screen.blit(test_surface, ((screen.get_width() / 2) - (test_surface.get_width() / 2) ,
+    #                             (screen.get_height() / 2) - (test_surface.get_height() / 2)))
+    screen.blit(player_surface,player_pos)
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
