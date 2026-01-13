@@ -18,7 +18,11 @@ sky_surface = pygame.image.load('graphics/Sky.png')
 ground_surface = pygame.image.load('graphics/Ground.png')
 
 #Player Surface
-player_surface = pygame.image.load('graphics/player/player_stand.png')
+alien_surface = pygame.image.load('graphics/player/player_stand.png')
+snail_surface = pygame.image.load('graphics/snail/snail1.png')
+snail_x_pos = 600
+#snail_dir == True means snail is moving left, False right
+snail_dir = True
 
 while running:
     pygame.display.update()
@@ -39,7 +43,19 @@ while running:
     screen.blit(text_surface, (300,50))
 
     #Render Player
-    screen.blit(player_surface,player_pos)
+    screen.blit(alien_surface,player_pos)
+    screen.blit(snail_surface, (snail_x_pos, 270))
+    if snail_x_pos == 0:
+        snail_dir = False
+    elif snail_x_pos >= 728:
+        snail_dir = True
+
+    if snail_dir:
+        snail_x_pos -= 3
+    else:
+        snail_x_pos += 3
+
+    
 
     #Player Movement Logic
     keys = pygame.key.get_pressed()
