@@ -6,9 +6,11 @@ screen = pygame.display.set_mode((800, 400))
 clock = pygame.time.Clock()
 running = True
 dt = 0
+test_font = pygame.font.Font('font/Pixeltype.ttf', 100)
 
 test_surface = pygame.Surface((100,200))
 test_surface.fill('Red')
+text_surface = test_font.render("My Game", False, 'Black')
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 
 #Background Surfaces
@@ -28,12 +30,18 @@ while running:
 
 
     #RENDER YOUR GAME HERE
+
+    #Render Background Surfaces
     screen.blit(sky_surface,(0,0))
     screen.blit(ground_surface,(0,300))
-    # screen.blit(test_surface, ((screen.get_width() / 2) - (test_surface.get_width() / 2) ,
-    #                             (screen.get_height() / 2) - (test_surface.get_height() / 2)))
+
+    #Render Text
+    screen.blit(text_surface, (300,50))
+
+    #Render Player
     screen.blit(player_surface,player_pos)
 
+    #Player Movement Logic
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
