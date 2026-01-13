@@ -11,16 +11,19 @@ test_font = pygame.font.Font('font/Pixeltype.ttf', 100)
 test_surface = pygame.Surface((100,200))
 test_surface.fill('Red')
 text_surface = test_font.render("My Game", False, 'Black')
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
+player_pos = pygame.Vector2((screen.get_width() / 2) - 100, (screen.get_height() / 2))
 
 #Background Surfaces
-sky_surface = pygame.image.load('graphics/Sky.png')
-ground_surface = pygame.image.load('graphics/Ground.png')
+sky_surface = pygame.image.load('graphics/Sky.png').convert()
+ground_surface = pygame.image.load('graphics/Ground.png').convert()
 
 #Player Surface
-alien_surface = pygame.image.load('graphics/player/player_stand.png')
-snail_surface = pygame.image.load('graphics/snail/snail1.png')
-snail_x_pos = 600
+snail_pos = pygame.Vector2((600, 270))
+alien_surface = pygame.image.load('graphics/player/player_stand.png').convert_alpha()
+snail_surface = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
+snail_rect = snail_surface.get_rect(topleft = snail_pos)
+alien_rect = alien_surface.get_rect(topleft = player_pos)
+
 #snail_dir == True means snail is moving left, False right
 snail_dir = True
 
@@ -43,18 +46,21 @@ while running:
     screen.blit(text_surface, (300,50))
 
     #Render Player
-    screen.blit(alien_surface,player_pos)
-    screen.blit(snail_surface, (snail_x_pos, 270))
-    if snail_x_pos == 0:
+    screen.blit(alien_surface,alien_rect)
+    screen.blit(snail_surface, snail_rect)
+    
+
+    #snail logic
+    if snail_pos.x == 0:
         snail_dir = False
-    elif snail_x_pos >= 728:
+    elif snail_pos.x >= 728:
         snail_dir = True
 
     if snail_dir:
-        snail_x_pos -= 3
+        snail_pos.x -= 3
     else:
-        snail_x_pos += 3
-
+        snail_pos.x += 3
+    snail_rect.x = snail_pos.x
     
 
     #Player Movement Logic
@@ -67,9 +73,16 @@ while running:
         player_pos.x -= 300 * dt
     if keys[pygame.K_d]:
         player_pos.x += 300 * dt
+    alien_rect.topleft = player_pos
+
+    #Collision Logic
+    if alien_rect.colliderect(snail_rect):
+        player_pos.y -= 100
 
     #flip() the display to put your work on screen
     pygame.display.flip()
+
+
 
 
     # limits FPS to 60
