@@ -10,12 +10,13 @@ test_font = pygame.font.Font('font/Pixeltype.ttf', 100)
 
 test_surface = pygame.Surface((100,200))
 test_surface.fill('Red')
-text_surface = test_font.render("My Game", False, 'Black')
+score_surface = test_font.render("My Game", False, 'Black')
 player_pos = pygame.Vector2((screen.get_width() / 2) - 100, (screen.get_height() / 2))
 
 #Background Surfaces
 sky_surface = pygame.image.load('graphics/Sky.png').convert()
 ground_surface = pygame.image.load('graphics/Ground.png').convert()
+score_rect = score_surface.get_rect(center = (screen.get_width() / 2, 50))
 
 #Player Surface
 snail_pos = pygame.Vector2((600, 270))
@@ -34,37 +35,46 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEMOTION:
+            if alien_rect.collidepoint(event.pos):
+                pass
 
 
-    #RENDER YOUR GAME HERE
+    #Render Game Here
 
     #Render Background Surfaces
     screen.blit(sky_surface,(0,0))
     screen.blit(ground_surface,(0,300))
 
     #Render Text
-    screen.blit(text_surface, (300,50))
+    pygame.draw.rect(screen, 'Pink', score_rect)
+    pygame.draw.rect(screen, 'Blue', score_rect, 10)
+    pygame.draw.ellipse(screen, 'Brown',pygame.Rect(50,200,100,100))
+    
+    screen.blit(score_surface, score_rect)
 
     #Render Player
     screen.blit(alien_surface,alien_rect)
     screen.blit(snail_surface, snail_rect)
     
 
-    #snail logic
-    if snail_pos.x == 0:
-        snail_dir = False
-    elif snail_pos.x >= 728:
-        snail_dir = True
-
-    if snail_dir:
-        snail_pos.x -= 3
-    else:
-        snail_pos.x += 3
-    snail_rect.x = snail_pos.x
+    
     
 
     #Player Movement Logic
     keys = pygame.key.get_pressed()
+    if keys[pygame.K_z]:
+            #snail logic
+        if snail_pos.x == 0:
+            snail_dir = False
+        elif snail_pos.x >= 728:
+            snail_dir = True
+
+        if snail_dir:
+            snail_pos.x -= 3
+        else:
+            snail_pos.x += 3
+        snail_rect.x = snail_pos.x
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
     if keys[pygame.K_s]:
@@ -78,6 +88,9 @@ while running:
     #Collision Logic
     if alien_rect.colliderect(snail_rect):
         player_pos.y -= 100
+    #Mouse Collision
+    mouse_pos = pygame.mouse.get_pos()
+    
 
     #flip() the display to put your work on screen
     pygame.display.flip()
